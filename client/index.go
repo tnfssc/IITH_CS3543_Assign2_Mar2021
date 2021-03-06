@@ -8,7 +8,7 @@ import (
 
 func main() {
 	p := make([]byte, 2048)
-	conn, err := net.Dial("udp", "127.0.0.1:1234")
+	conn, err := net.Dial("udp", "192.168.122.247:12345")
 	if err != nil {
 		fmt.Printf("Some error %v", err)
 		return
