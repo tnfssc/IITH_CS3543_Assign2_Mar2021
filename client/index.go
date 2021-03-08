@@ -1,24 +1,33 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"net"
+	"os"
+	"strings"
 )
 
+const BufferSize = 1024
+
+func sendFileToServer(fileName string, connection net.Conn) {
+	var currentByte int64 = 0
+	fmt.Println("send to client")
+	fileBuffer := make([]byte, BufferSize)
+	var err error
+	file, _ := os.Open(strings.TrimSpace(fileName))
+	_, _ = connection.Write([]byte(fileName))
+	for err == nil || err != io.EOF {
+		n := 0
+		n, err = file.ReadAt(fileBuffer, currentByte)
+		currentByte += BufferSize
+		_, _ = connection.Write(fileBuffer[:n])
+	}
+	_ = file.Close()
+	_ = connection.Close()
+}
+
 func main() {
-	p := make([]byte, 2048)
-	conn, err := net.Dial("udp", "192.168.122.247:12345")
-	if err != nil {
-		fmt.Printf("Some error %v", err)
-		return
-	}
-	_, _ = fmt.Fprintf(conn, "Hi UDP Server, How are you doing?")
-	_, err = bufio.NewReader(conn).Read(p)
-	if err == nil {
-		fmt.Printf("%s\n", p)
-	} else {
-		fmt.Printf("Some error %v\n", err)
-	}
-	_ = conn.Close()
+	conn, _ := net.Dial("udp", "127.0.0.1:12345")
+	sendFileToServer("send/awsm.txt", conn)
 }
