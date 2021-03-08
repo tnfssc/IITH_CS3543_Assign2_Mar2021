@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"io"
 	"net"
 	"os"
+	"strconv"
 )
 
 const BufferSize = 1024
@@ -41,10 +43,23 @@ func connectionHandler(connection net.Conn) {
 }
 
 func main() {
+	var Addr string
+	var Port string
+	flag.StringVar(&Addr, "l", "0.0.0.0", "Specify IP address. Default is 0.0.0.0")
+	flag.StringVar(&Port, "p", "12345", "Specify port. Default is 12345")
+
+	flag.Parse()
+
+	PortNumber, err := strconv.Atoi(Port)
+	if err != nil {
+		fmt.Println("Use a valid port: ", err)
+		os.Exit(1)
+	}
 	addr := net.UDPAddr{
-		Port: 12345,
-		IP:   net.ParseIP("127.0.0.1"),
+		Port: PortNumber,
+		IP:   net.ParseIP(Addr),
 	}
 	ser, _ := net.ListenUDP("udp", &addr)
+	fmt.Println("Listening on ", Addr, Port)
 	connectionHandler(ser)
 }

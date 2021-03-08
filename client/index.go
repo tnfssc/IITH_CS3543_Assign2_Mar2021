@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"net"
@@ -12,7 +13,7 @@ const BufferSize = 1024
 
 func sendFileToServer(fileName string, connection net.Conn) {
 	var currentByte int64 = 0
-	fmt.Println("send to client")
+	fmt.Println("sending")
 	fileBuffer := make([]byte, BufferSize)
 	var err error
 	file, _ := os.Open(strings.TrimSpace(fileName))
@@ -25,9 +26,15 @@ func sendFileToServer(fileName string, connection net.Conn) {
 	}
 	_ = file.Close()
 	_ = connection.Close()
+	fmt.Println("sent")
 }
 
 func main() {
-	conn, _ := net.Dial("udp", "127.0.0.1:12345")
+	var Addr string
+	flag.StringVar(&Addr, "d", "127.0.0.1:12345", "Specify destination. Default is 127.0.0.1")
+
+	flag.Parse()
+
+	conn, _ := net.Dial("udp", Addr)
 	sendFileToServer("send/awsm.txt", conn)
 }
