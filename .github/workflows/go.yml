@@ -20,4 +20,6 @@ jobs:
 
     - name: Start server
       run: |
-        cd server & go run index.go -l 127.0.0.1 -p 20000 && cd ../client && echo "Awsm text here" > awsm.txt && go run index.go -d 127.0.0.1:20000 -f awsm.txt
+        & go run ./server/index.go -l 127.0.0.1 -p 20000
+    - name: Start client
+      run:  echo "Awsm text here" > awsm.txt && go run ./client/index.go -d 127.0.0.1:20000 -f awsm.txt
