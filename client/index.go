@@ -33,7 +33,7 @@ func sendFileToServer(filePath string, connection net.Conn) {
 func main() {
 	var Addr = ""
 	var filePath = ""
-	flag.StringVar(&Addr, "d", "", "Specify destination. eg. '127.0.0.1'")
+	flag.StringVar(&Addr, "d", "", "Specify destination. eg. '127.0.0.1:12345'")
 	flag.StringVar(&filePath, "f", "", "Specify file path. eg. '"+path.Join("send", "awsm.txt")+"'")
 	flag.Parse()
 	if (Addr == "") || filePath == "" {
