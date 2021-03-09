@@ -9,9 +9,9 @@ Golang compiler/runner installed on your computer with all the default packages
 ## Usage (WIP)
 
 ```bash
-./server -l 127.0.0.1 -p 1234
+./server -l 0.0.0.0 -p 1234
 ```
 
 ```bash
-./client -d 192.168.122.121:1234
+./client -d 192.168.122.121:1234 -f send/text.txt
 ```
