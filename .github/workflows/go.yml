@@ -1,0 +1,26 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+
+    - name: Start server
+    - run: |
+        cd server && go run index.go -l 127.0.0.1 -p 20000
+
+    - name: Start client
+    - run: cd client && echo "Awsm text here" > awsm.txt && go run index.go -d 127.0.0.1:20000 -f awsm.txt
